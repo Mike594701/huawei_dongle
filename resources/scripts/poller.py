@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from huawei_lte_api.Client import Client
-from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
+from huawei_lte_api.Connection import Connection
 
 import huawei_lte_api
 import json
@@ -16,7 +16,7 @@ if len(sys.argv) == 4:
 	list.append('{"huawei_lte_api": "'+huawei_lte_api.__version__+'"}')
 	
 	try:
-		connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
+		connection = Connection('http://' + ip + '/',username=login,password=pwd)
 		client = Client(connection)
 
 		try:

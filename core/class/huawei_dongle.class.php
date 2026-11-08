@@ -963,7 +963,7 @@ class huawei_dongleRouter {
 	}
 	
 	private function setInfo($out) {
-		// huawei_dongle::add_log( 'debug', 'Output: '.$out);
+		 huawei_dongle::add_log( 'debug', 'Output: '.$out);
 		
 		// removing Python bracket list
 		$tmp = substr(trim($out), 2, -2);
@@ -1027,13 +1027,21 @@ class huawei_dongleRouter {
           return true;
       return (substr($haystack, -$length) === $needle);
   }
-
+ 
   private function validateAndCleanJson($jsonString, $key = null) {
+    huawei_dongle::add_log('debug', 'JSON brut : ' . $jsonString);
+    if ($jsonString === null || trim((string)$jsonString) === '') {
+            huawei_dongle::add_log(
+                'debug',
+                "JSON vide ignoré (key=$key)"
+            );
+            return null;
+        }
       // Supprimer les caractères avant le premier {
       while (isset($jsonString[0]) && $jsonString[0] !== '{') {
           $jsonString = substr($jsonString, 1);
       }
-    huawei_dongle::add_log('debug',  $jsonString);
+   
       // Supprimer les caractères après le dernier }
       $lastClosing = strrpos($jsonString, '}');
       if ($lastClosing !== false) {
@@ -1077,6 +1085,7 @@ class huawei_dongleRouter {
           huawei_dongle::add_log('debug', $decoded);
           return $decoded;
       } else {
+        huawei_dongle::add_log('debug', 'JSON modifié : ' . $jsonString);
           huawei_dongle::add_log('error', "[Code 181, Structure $key] " . json_last_error_msg());
           huawei_dongle::add_log('info', $key . ': ' . $jsonString);
           return null;
